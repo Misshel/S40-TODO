@@ -18,13 +18,15 @@ const Todo = () =>{
 
 	input.on('keypress',(e) => {
 		if(e.which === 13){
-			state.todos.push({
-				text: input.val(),
-				completed: false
-			});
+			if (input.val() != "") {
+					state.todos.push({
+						text: input.val(),
+						completed: false
+					});
 
-		input.val('');
-		reRender(list,completedList);
+				input.val('');
+				reRender(list,completedList);
+			}
 		}
 	});
 
@@ -41,28 +43,28 @@ const reRender = (todoList, completedList) => {
 			completedList.append(TodoItem(todo, _ => { reRender(todoList, completedList);}));
 		}
 	});
-};
+}
 
 const TodoItem = (data, update) => {
 	const todo = $('<div class = "todo"></div>');
-	const checkbox = $('<input type ="checkbox">');
+	const checkbox = $('<input type ="checkbox"></input>');
 	const span = $('<span>'+ data.text + '</span>');
 	const remove = $('<button>Remove</button>');
 
 	todo.append(checkbox);
-        todo.append(span);
-        todo.append(remove);
+  todo.append(span);
+  todo.append(remove);
 
-	checkbox.on('change',(e) => { 
+	checkbox.on('change',(e) => {
 		data.completed = !data.completed;
 		update();
 	});
 
 	remove.on('click', (e) => {
-		const idx = state.todos.map( x => x.text).indexOf(data, text);
+		const idx = state.todos.map( x => x.text).indexOf(data.text);
 		state.todos.splice(idx, 1);
 		update();
 	});
-	
+
 	return todo;
 }
